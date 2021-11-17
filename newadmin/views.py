@@ -11,6 +11,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
+# admin login
 @api_view(['GET', 'POST'])
 def admin_login(request):
     print("ITS CAME")
@@ -30,10 +31,8 @@ def admin_login(request):
             "messages" : "Admin authenication failed!!"
         })
 
-def admin_home(request):
-    return render(request,'Admin_home.html')
 
-
+# user account activate
 @api_view(['GET', 'POST'])
 def user_activate(request,id):
     user2 = User.objects.get(id=id)
@@ -45,7 +44,7 @@ def user_activate(request,id):
     })
    
    
-   
+# user account deactivate  
 @api_view(['GET', 'POST'])
 def user_deactivate(request,id):
     user2 = User.objects.get(id=id)

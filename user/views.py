@@ -52,7 +52,6 @@ def login_sub(request):
     responce.data = {
         'jwt': token
     }
-    
     return responce
 
 
