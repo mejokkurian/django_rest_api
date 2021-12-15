@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
 )
 
 
+
 urlpatterns = [
    path('',views.login,name='login'),
    path('register',views.register,name='register'),

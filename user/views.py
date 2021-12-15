@@ -32,23 +32,22 @@ def register(request):
 # login page and user authentication checking and jwt token genaration
 @api_view(['POST'])
 def login_sub(request):
-    email = request.data["email"]  
+    username = request.data["username"]  
     password = request.data["password"]  
-
-    user = User.objects.filter(email= email).first()
+    useerr = authenticate(username = username, password = password)
+    print(useerr)
+    if useerr is None:
+        return Response(False)
     
-    if user is None:
-        raise AuthenticationFailed("user not found")
-    
-    payload = {
-        'id' : user.id,
+    payload = { 
+        'id' : useerr.id,
         'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
         'iat' : datetime.datetime.utcnow()
     }
     
     token = jwt.encode(payload, 'secret',algorithm='HS256')
     responce = Response()
-    responce.set_cookie(key = 'jwt', value = token, httponly = True)
+    responce.set_cookie(key = 'jwt', value = token, httponly = False, path = '/', )
     responce.data = {
         'jwt': token
     }
@@ -58,15 +57,15 @@ def login_sub(request):
 # check user authentication using jwt tokens
 @api_view(['GET'])
 def user_view(request):
-    token = request.COOKIES.get('jwt')
+    # token = request.COOKIES.get('jwt')
+    token = request.headers['Authorization']
     print(token,"dfgdfgdfgdf")
     if not token:
-        raise AuthenticationFailed("Unauthenticated")
-    
+        return Response(False)        
     try:
         payload = jwt.decode(token,'secret', algorithms =['HS256'])
     except jwt.ExpiredSignatureError:
-        raise AuthenticationFailed("Key expired ")
+        raise AuthenticationFailed("Key expired")
     
         
     user = User.objects.filter(id = payload['id']).first()

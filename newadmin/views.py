@@ -42,7 +42,7 @@ def user_activate(request,id):
     return Response ({
         "messages" : "user activated"
     })
-   dsfdsffsdf
+   
    
 # user account deactivate  
 @api_view(['GET', 'POST'])
